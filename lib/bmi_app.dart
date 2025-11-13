@@ -15,6 +15,67 @@ class _BmiAppState extends State<BmiApp> {
   WeightType weightType = WeightType.kg;
   HeightType heightType = HeightType.m;
 
+  final kgCtr = TextEditingController();
+  final poundCtr = TextEditingController();
+  final mCtr = TextEditingController();
+  final cmCtr = TextEditingController();
+  final feetCtr = TextEditingController();
+  final inchCtr = TextEditingController();
+
+  @override
+  void dispose() {
+    kgCtr.dispose();
+    poundCtr.dispose();
+    mCtr.dispose();
+    cmCtr.dispose();
+    feetCtr.dispose();
+    inchCtr.dispose();
+    super.dispose();
+  }
+
+  // 1 pound = 0.454 kg
+  double? poundToKg() {
+    final pound = double.tryParse(poundCtr.text.trim());
+    if (pound == null || pound <= 0) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid Input for Pound')));
+      return null;
+    }
+    return pound*0.454;
+  }
+
+  // 1 m = 100 cm
+  double? cmToM() {
+    final cm = double.tryParse(cmCtr.text.trim());
+    if (cm == null || cm <= 0) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid Input for CM')));
+      return null;
+    }
+    return cm/100.0;
+  }
+
+  //12 feet = 1 inch & 1 Inch = 0.0254 meter
+  double? feetInchToM() {
+    final feet = double.tryParse(feetCtr.text.trim());
+    final inch = double.tryParse(inchCtr.text.trim());
+    if (feet == null || feet <= 0) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid Input for Feet')));
+      return null;
+    } else if (inch == null || inch <= 0 || inch >11){
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid Input for Inch')));
+      return null;
+    }
+    final totalInch = (feet * 12 ) + inch;
+    return totalInch * 0.0254;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -66,9 +127,10 @@ class _BmiAppState extends State<BmiApp> {
               weightType = value.first;
             }),
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           if (weightType == WeightType.kg) ...[
             TextField(
+              controller: kgCtr,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Weight (kg)',
@@ -79,6 +141,7 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ] else ...[
             TextField(
+              controller: poundCtr,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Weight (pound)',
@@ -110,9 +173,10 @@ class _BmiAppState extends State<BmiApp> {
               heightType = value.first;
             }),
           ),
-          SizedBox(height: 8,),
+          SizedBox(height: 8),
           if (heightType == HeightType.m) ...[
             TextField(
+              controller: mCtr,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Height (m)',
@@ -123,6 +187,7 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ] else if (heightType == HeightType.cm) ...[
             TextField(
+              controller: cmCtr,
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Height (cm)',
@@ -136,6 +201,7 @@ class _BmiAppState extends State<BmiApp> {
               children: [
                 Expanded(
                   child: TextField(
+                    controller: feetCtr,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: "Feet (')",
@@ -148,6 +214,7 @@ class _BmiAppState extends State<BmiApp> {
                 SizedBox(width: 10),
                 Expanded(
                   child: TextField(
+                    controller: inchCtr,
                     keyboardType: TextInputType.number,
                     decoration: InputDecoration(
                       labelText: 'Inch (")',
