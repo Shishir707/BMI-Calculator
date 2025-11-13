@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
-enum WeightType {kg , pound}
-enum HeightType {m , cm , feetInch}
+enum WeightType { kg, pound }
+
+enum HeightType { m, cm, feetInch }
 
 class BmiApp extends StatefulWidget {
   const BmiApp({super.key});
@@ -11,7 +12,6 @@ class BmiApp extends StatefulWidget {
 }
 
 class _BmiAppState extends State<BmiApp> {
-
   WeightType weightType = WeightType.kg;
   HeightType heightType = HeightType.m;
 
@@ -44,67 +44,114 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ),
           SizedBox(height: 15),
-          Text('Weight Unit',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Weight (KG)',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+          /// ====================== Weight Unit ==================
+          Text(
+            'Weight Unit',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+          ),
+          SegmentedButton<WeightType>(
+            segments: [
+              const ButtonSegment<WeightType>(
+                value: WeightType.kg,
+                label: Text('Kg'),
+              ),
+              const ButtonSegment<WeightType>(
+                value: WeightType.pound,
+                label: Text('Pound'),
+              ),
+            ],
+            selected: {weightType},
+            onSelectionChanged: (value) => setState(() {
+              weightType = value.first;
+            }),
+          ),
+          if (weightType == WeightType.kg)...[
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Weight (kg)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
+              ),
+            )
+          ] else...[
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Weight (pound)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
             ),
-          ),
+          ],
           SizedBox(height: 16),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Weight (Pound)',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
-          ),
           SizedBox(height: 16),
-          Text('Height Unit',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Height (m)',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+          /// ========================== Height Unit ==========================
+          Text(
+            'Height Unit',
+            style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
-          SizedBox(height: 16),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Height (cm)',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
-              ),
-            ),
+          SegmentedButton(segments: [
+            ButtonSegment(value: HeightType.m , label: Text('M')),
+            ButtonSegment(value: HeightType.cm, label: Text('CM')),
+            ButtonSegment(value: HeightType.feetInch, label: Text('Feet/Inch'))
+          ], 
+              selected: {heightType},
+            onSelectionChanged: (value) => setState(() {
+              heightType = value.first;
+            }),
           ),
-          SizedBox(height: 16),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Height (feet)',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+          if (heightType == HeightType.m)...[
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Height (m)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-            ),
-          ),
-          SizedBox(height: 16),
-          TextField(
-            keyboardType: TextInputType.number,
-            decoration: InputDecoration(
-              labelText: 'Height (inch)',
-              border: OutlineInputBorder(
-                borderRadius: BorderRadius.circular(10),
+            )
+          ] else if (heightType == HeightType.cm)...[
+            TextField(
+              keyboardType: TextInputType.number,
+              decoration: InputDecoration(
+                labelText: 'Height (cm)',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                ),
               ),
-            ),
-          ),
+            )
+          ]else...[
+            Row(
+              children: [
+                Expanded(
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: "Feet (')",
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+                SizedBox(width: 10),
+                Expanded(
+                  child: TextField(
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      labelText: 'Inch (")',
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            )
+          ],
           SizedBox(height: 16),
           ElevatedButton(
             onPressed: () {},
