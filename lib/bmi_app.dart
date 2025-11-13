@@ -24,6 +24,7 @@ class _BmiAppState extends State<BmiApp> {
   String? bmiResult = '';
   String? bmiStatus = '';
   String? bmiSuggestion = "";
+  Color cardColor = Colors.grey[200]!;
 
   @override
   void dispose() {
@@ -105,46 +106,60 @@ class _BmiAppState extends State<BmiApp> {
     }
 
     final bmi = weight / (height * height);
-    final status = checkStatus(bmi);
+    final resultInfo = checkStatus(bmi);
 
     setState(() {
       bmiResult = bmi.toStringAsFixed(1);
-      bmiStatus = status;
+      bmiStatus = resultInfo['status'];
+      bmiSuggestion = resultInfo['suggestion'];
+      cardColor = resultInfo['color'];
     });
   }
 
   checkStatus(double? result) {
     String status = '';
     String suggestion = '';
+    Color color = Colors.grey[300]!;
 
     if (result == null) {
-      setState(() {
-        status = 'Invalid BMI';
-        suggestion = "Enter Height & weight Carefully";
-      });
-      return;
+      return {
+        status = 'Invalid BMI',
+        suggestion = "Enter Height & weight Carefully",
+        color = Colors.grey,
+      };
     }
     if (result < 18.5) {
       status = "Underweight";
-      suggestion = "Try to include more nutritious, calorie-dense foods in your diet.";
+      suggestion =
+          "Try to include more nutritious, calorie-dense foods in your diet.";
+      color = Colors.blue.shade100;
     } else if (result >= 18.5 && result <= 24.9) {
       status = "Normal weight";
-      suggestion = "Great! Maintain your weight with balanced diet and regular exercise.";
+      suggestion =
+          "Great! Maintain your weight with balanced diet and regular exercise.";
+      color = Colors.green.shade100;
     } else if (result >= 25.0 && result <= 29.9) {
       status = "Overweight";
-      suggestion = "Consider increasing physical activity and improving your diet.";
+      suggestion =
+          "Consider increasing physical activity and improving your diet.";
+      color = Colors.orange.shade100;
     } else if (result >= 30.0 && result <= 34.9) {
       status = "Obesity (Class I)";
-      suggestion = "Adopt a healthy eating plan and consult a fitness expert if possible.";
+      suggestion =
+          "Adopt a healthy eating plan and consult a fitness expert if possible.";
+      color = Colors.deepOrange.shade100;
     } else if (result >= 35.0 && result <= 39.9) {
       status = "Obesity (Class II)";
-      suggestion = "It’s advisable to consult a doctor for weight management guidance.";
+      suggestion =
+          "It’s advisable to consult a doctor for weight management guidance.";
+      color = Colors.red.shade200;
     } else {
       status = "Obesity (Class III)";
       suggestion = "Seek medical advice for a safe weight reduction plan.";
+      color = Colors.red.shade300;
     }
 
-    return {'status': status, 'suggestion': suggestion};
+    return {'status': status, 'suggestion': suggestion, 'color': color};
   }
 
   @override
@@ -317,28 +332,11 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ),
           SizedBox(height: 10),
-          Card(
-            child: Column(
-              children: [
-                Text(
-                  '---- BMI Result ----',
-                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
-                ),
-                Text('Your BMI is : $bmiResult'),
-                Text('According to BMI You are Now $bmiStatus'),
-              ],
-            ),
-          ),
-          Text(
-            'Result : $bmiResult',
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 16,
-              fontWeight: FontWeight.w400,
-            ),
-          ),
+          result(cardColor: cardColor, bmiResult: bmiResult, bmiStatus: bmiStatus, bmiSuggestion: bmiSuggestion),
         ],
       ),
     );
   }
 }
+
+
