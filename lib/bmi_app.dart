@@ -21,6 +21,9 @@ class _BmiAppState extends State<BmiApp> {
   final cmCtr = TextEditingController();
   final feetCtr = TextEditingController();
   final inchCtr = TextEditingController();
+  String? bmiResult = '';
+  String? bmiStatus = '';
+  String? bmiSuggestion = "";
 
   @override
   void dispose() {
@@ -42,7 +45,7 @@ class _BmiAppState extends State<BmiApp> {
       ).showSnackBar(SnackBar(content: Text('Invalid Input for Pound')));
       return null;
     }
-    return pound*0.454;
+    return (pound * 0.454);
   }
 
   // 1 m = 100 cm
@@ -54,7 +57,7 @@ class _BmiAppState extends State<BmiApp> {
       ).showSnackBar(SnackBar(content: Text('Invalid Input for CM')));
       return null;
     }
-    return cm/100.0;
+    return cm / 100.0;
   }
 
   //12 feet = 1 inch & 1 Inch = 0.0254 meter
@@ -66,14 +69,82 @@ class _BmiAppState extends State<BmiApp> {
         context,
       ).showSnackBar(SnackBar(content: Text('Invalid Input for Feet')));
       return null;
-    } else if (inch == null || inch <= 0 || inch >11){
+    } else if (inch == null || inch < 0 || inch > 11) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(SnackBar(content: Text('Invalid Input for Inch')));
       return null;
     }
-    final totalInch = (feet * 12 ) + inch;
+    final totalInch = (feet * 12) + inch;
     return totalInch * 0.0254;
+  }
+
+  calculate() {
+    final kg = double.tryParse(kgCtr.text.trim());
+
+    final weight = weightType == WeightType.kg ? kg : poundToKg();
+
+    final height = (heightType == HeightType.m)
+        ? double.tryParse(mCtr.text.trim())
+        : (heightType == HeightType.cm)
+        ? cmToM()
+        : feetInchToM();
+
+    if (weight == null || weight <= 0) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid input for weight')));
+      return;
+    }
+
+    if (height == null || height <= 0) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(SnackBar(content: Text('Invalid input for height')));
+      return;
+    }
+
+    final bmi = weight / (height * height);
+    final status = checkStatus(bmi);
+
+    setState(() {
+      bmiResult = bmi.toStringAsFixed(1);
+      bmiStatus = status;
+    });
+  }
+
+  checkStatus(double? result) {
+    String status = '';
+    String suggestion = '';
+
+    if (result == null) {
+      setState(() {
+        status = 'Invalid BMI';
+        suggestion = "Enter Height & weight Carefully";
+      });
+      return;
+    }
+    if (result < 18.5) {
+      status = "Underweight";
+      suggestion = "Try to include more nutritious, calorie-dense foods in your diet.";
+    } else if (result >= 18.5 && result <= 24.9) {
+      status = "Normal weight";
+      suggestion = "Great! Maintain your weight with balanced diet and regular exercise.";
+    } else if (result >= 25.0 && result <= 29.9) {
+      status = "Overweight";
+      suggestion = "Consider increasing physical activity and improving your diet.";
+    } else if (result >= 30.0 && result <= 34.9) {
+      status = "Obesity (Class I)";
+      suggestion = "Adopt a healthy eating plan and consult a fitness expert if possible.";
+    } else if (result >= 35.0 && result <= 39.9) {
+      status = "Obesity (Class II)";
+      suggestion = "It’s advisable to consult a doctor for weight management guidance.";
+    } else {
+      status = "Obesity (Class III)";
+      suggestion = "Seek medical advice for a safe weight reduction plan.";
+    }
+
+    return {'status': status, 'suggestion': suggestion};
   }
 
   @override
@@ -229,7 +300,7 @@ class _BmiAppState extends State<BmiApp> {
           ],
           SizedBox(height: 16),
           ElevatedButton(
-            onPressed: () {},
+            onPressed: calculate,
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.deepPurpleAccent[200],
               shape: RoundedRectangleBorder(
@@ -246,8 +317,20 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ),
           SizedBox(height: 10),
+          Card(
+            child: Column(
+              children: [
+                Text(
+                  '---- BMI Result ----',
+                  style: TextStyle(fontSize: 17, fontWeight: FontWeight.bold),
+                ),
+                Text('Your BMI is : $bmiResult'),
+                Text('According to BMI You are Now $bmiStatus'),
+              ],
+            ),
+          ),
           Text(
-            'Result :',
+            'Result : $bmiResult',
             style: TextStyle(
               color: Colors.black,
               fontSize: 16,
