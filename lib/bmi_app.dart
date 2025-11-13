@@ -1,3 +1,4 @@
+import 'package:bmi_calculator/widget/result.dart';
 import 'package:flutter/material.dart';
 
 enum WeightType { kg, pound }
@@ -332,7 +333,7 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ),
           SizedBox(height: 10),
-          result(cardColor: cardColor, bmiResult: bmiResult, bmiStatus: bmiStatus, bmiSuggestion: bmiSuggestion),
+          Result(cardColor: cardColor, bmiResult: bmiResult, bmiStatus: bmiStatus, bmiSuggestion: bmiSuggestion),
         ],
       ),
     );
