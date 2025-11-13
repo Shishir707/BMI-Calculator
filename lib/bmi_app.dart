@@ -42,9 +42,6 @@ class _BmiAppState extends State<BmiApp> {
   double? poundToKg() {
     final pound = double.tryParse(poundCtr.text.trim());
     if (pound == null || pound <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Invalid Input for Pound')));
       return null;
     }
     return (pound * 0.454);
@@ -54,9 +51,6 @@ class _BmiAppState extends State<BmiApp> {
   double? cmToM() {
     final cm = double.tryParse(cmCtr.text.trim());
     if (cm == null || cm <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Invalid Input for CM')));
       return null;
     }
     return cm / 100.0;
@@ -67,14 +61,8 @@ class _BmiAppState extends State<BmiApp> {
     final feet = double.tryParse(feetCtr.text.trim());
     final inch = double.tryParse(inchCtr.text.trim());
     if (feet == null || feet <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Invalid Input for Feet')));
       return null;
     } else if (inch == null || inch < 0 || inch > 11) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Invalid Input for Inch')));
       return null;
     }
     final totalInch = (feet * 12) + inch;
@@ -93,16 +81,48 @@ class _BmiAppState extends State<BmiApp> {
         : feetInchToM();
 
     if (weight == null || weight <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Invalid input for weight')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade50,
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.close, color: Colors.red),
+              SizedBox(width: 5),
+              Text(
+                'Invalid input for Weight.',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
       return;
     }
 
     if (height == null || height <= 0) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Invalid input for height')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          backgroundColor: Colors.red.shade50,
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(Icons.close, color: Colors.red),
+              SizedBox(width: 5),
+              Text(
+                'Invalid input for Height',
+                style: TextStyle(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
       return;
     }
 
@@ -333,11 +353,14 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ),
           SizedBox(height: 10),
-          Result(cardColor: cardColor, bmiResult: bmiResult, bmiStatus: bmiStatus, bmiSuggestion: bmiSuggestion),
+          Result(
+            cardColor: cardColor,
+            bmiResult: bmiResult,
+            bmiStatus: bmiStatus,
+            bmiSuggestion: bmiSuggestion,
+          ),
         ],
       ),
     );
   }
 }
-
-
