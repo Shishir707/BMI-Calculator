@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+enum WeightType {kg , pound}
+enum HeightType {m , cm , feetInch}
+
 class BmiApp extends StatefulWidget {
   const BmiApp({super.key});
 
@@ -8,6 +11,10 @@ class BmiApp extends StatefulWidget {
 }
 
 class _BmiAppState extends State<BmiApp> {
+
+  WeightType weightType = WeightType.kg;
+  HeightType heightType = HeightType.m;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,12 +38,13 @@ class _BmiAppState extends State<BmiApp> {
               'Know your health score with one tap',
               style: TextStyle(
                 color: Colors.black,
-                fontWeight: FontWeight.w500,
-                fontSize: 17,
+                fontWeight: FontWeight.bold,
+                fontSize: 18,
               ),
             ),
           ),
-          SizedBox(height: 10),
+          SizedBox(height: 15),
+          Text('Weight Unit',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
           TextField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
@@ -47,6 +55,17 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ),
           SizedBox(height: 16),
+          TextField(
+            keyboardType: TextInputType.number,
+            decoration: InputDecoration(
+              labelText: 'Weight (Pound)',
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          SizedBox(height: 16),
+          Text('Height Unit',style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
           TextField(
             keyboardType: TextInputType.number,
             decoration: InputDecoration(
