@@ -44,6 +44,7 @@ class _BmiAppState extends State<BmiApp> {
             ),
           ),
           SizedBox(height: 15),
+
           /// ====================== Weight Unit ==================
           Text(
             'Weight Unit',
@@ -65,65 +66,72 @@ class _BmiAppState extends State<BmiApp> {
               weightType = value.first;
             }),
           ),
-          if (weightType == WeightType.kg)...[
+          SizedBox(height: 8,),
+          if (weightType == WeightType.kg) ...[
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Weight (kg)',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-            )
-          ] else...[
+            ),
+          ] else ...[
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Weight (pound)',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
             ),
           ],
           SizedBox(height: 16),
           SizedBox(height: 16),
+
           /// ========================== Height Unit ==========================
           Text(
             'Height Unit',
             style: TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
           ),
-          SegmentedButton(segments: [
-            ButtonSegment(value: HeightType.m , label: Text('M')),
-            ButtonSegment(value: HeightType.cm, label: Text('CM')),
-            ButtonSegment(value: HeightType.feetInch, label: Text('Feet/Inch'))
-          ], 
-              selected: {heightType},
+          SegmentedButton(
+            segments: [
+              ButtonSegment(value: HeightType.m, label: Text('M')),
+              ButtonSegment(value: HeightType.cm, label: Text('CM')),
+              ButtonSegment(
+                value: HeightType.feetInch,
+                label: Text('Feet/Inch'),
+              ),
+            ],
+            selected: {heightType},
             onSelectionChanged: (value) => setState(() {
               heightType = value.first;
             }),
           ),
-          if (heightType == HeightType.m)...[
+          SizedBox(height: 8,),
+          if (heightType == HeightType.m) ...[
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Height (m)',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-            )
-          ] else if (heightType == HeightType.cm)...[
+            ),
+          ] else if (heightType == HeightType.cm) ...[
             TextField(
               keyboardType: TextInputType.number,
               decoration: InputDecoration(
                 labelText: 'Height (cm)',
                 border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
+                  borderRadius: BorderRadius.circular(8),
                 ),
               ),
-            )
-          ]else...[
+            ),
+          ] else ...[
             Row(
               children: [
                 Expanded(
@@ -132,7 +140,7 @@ class _BmiAppState extends State<BmiApp> {
                     decoration: InputDecoration(
                       labelText: "Feet (')",
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                   ),
@@ -144,13 +152,13 @@ class _BmiAppState extends State<BmiApp> {
                     decoration: InputDecoration(
                       labelText: 'Inch (")',
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
+                        borderRadius: BorderRadius.circular(5),
                       ),
                     ),
                   ),
-                )
+                ),
               ],
-            )
+            ),
           ],
           SizedBox(height: 16),
           ElevatedButton(
